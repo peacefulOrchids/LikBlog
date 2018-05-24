@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lik.dao.LogDao">
+	<resultMap type="Log" id="LogResult">
+		<result property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="summary" column="summary"/>
+		<result property="content" column="content"/>
+		<result property="createTime" column="createTime"/>
+		<result property="keyWord" column="keyWord"/>
+		<result property="clickHit" column="clickHit"/>
+		<result property="replyHit" column="replyHit"/>
+		<association property="tag" column="tid"                       
+            select="com.lik.dao.TagDao.findById" />
+		<collection property="commentList" column="id" 
+		select="com.lik.dao.CommentDao.findByLid" />
+	</resultMap>
+	
+	<select id="find" parameterType="Map" resultMap="LogResult">
+		select * from logs 
+		<where>
+	        <if test="title != null and title!=''">
+	            title like #{title}
+	        </if>
+	        <if test="tid != null">
+	        	and tid = #{tid}
+	        </if>
+    	</where>
+    	ORDER BY createTime DESC,clickHit DESC
+        <if test="start != null">
+            limit #{start},#{pageSize}
+        </if>
+	</select>
+	<select id="findById" parameterType="Integer" resultMap="LogResult">
+		select * from logs where id = #{id}
+	</select>
+	<select id="countLogs" parameterType="Map"  resultType="Long">
+		select count(*) from logs
+		<where>
+	        <if test="title != null and title!=''">
+	            title like #{title}
+	        </if>
+	        <if test="tid != null">
+	        	and tid = #{tid}
+	        </if>
+        </where>
+	</select>	<!-- useGeneratedKeys="true" keyProperty="id" 添加时返回id -->
+	<insert id="add" parameterType="Log" useGeneratedKeys="true" keyProperty="id">
+		insert into logs values (null,#{title},#{summary},#{content},#{createTime},#{tag.id},#{keyWord},#{clickHit},#{replyHit})
+	</insert>
+	<update id="update" parameterType="Log">
+		update logs
+		<set>
+			<if test="title != null and title != ''">
+				title = #{title},
+			</if>
+			<if test="summary != null and summary != ''">
+				summary = #{summary},
+			</if>
+			<if test="content != null and content != ''">
+				content = #{content},
+			</if>
+			<if test="createTime != null and createTime != ''">
+				createTime = #{createTime},
+			</if>
+			<if test="keyWord != null and keyWord != ''">
+				keyWord = #{keyWord},
+			</if>
+			<if test="tag.id != null and tag.id != ''">
+				tid = #{tag.id}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<delete  id="delete" parameterType="Integer">
+		delete from logs where id=#{id}
+	</delete>
+	
+	<update id="addClickOrReply" parameterType="Map">
+		UPDATE logs
+		<set>
+			<if test="hit != null and hit != ''">
+				<if test="hit == '点击量'">
+					 clickHit = clickHit + 1
+				</if>
+				<if test="hit == '评论量'">
+					 replyHit = replyHit + 1
+				</if>
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<update id="deleteClickOrReply" parameterType="Map">
+		UPDATE logs
+		<set>
+			<if test="hit != null and hit != ''">
+				<if test="hit == '点击量'">
+					 clickHit = clickHit - 1
+				</if>
+				<if test="hit == '评论量'">
+					 replyHit = replyHit - 1
+				</if>
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<select id="findIdNext" parameterType="Integer" resultType="Log">
+		SELECT  * FROM logs WHERE id &gt; #{id} LIMIT 0,1
+	</select>
+	<select id="findIdLast" parameterType="Integer" resultType="Log">
+		SELECT  * FROM logs WHERE id &lt; #{id} ORDER BY id DESC  LIMIT 0,1
+	</select>
+</mapper>

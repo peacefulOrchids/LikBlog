@@ -1,0 +1,94 @@
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+#div_body {
+	background-color: #00FFFF;
+	width: 100%;
+	height: 100%;
+}
+
+#div_header {
+	width: 1920px;
+	height: 235px;
+}
+
+#img1 {
+	display: block;
+	padding-top: 188px;
+	width: 936px;
+	height: 62px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#div_center {
+	width: 1920px;
+	height: 165px;
+	background-color: #2d8599;
+}
+
+#div_center_center {
+	width: 963px;
+	height: 165px;
+	display: block;
+	background-image: url("../images/body_05.jpg");
+	margin-left: 492px;
+	margin-right: auto;
+}
+
+#div_bottom {
+	width: 1920px;
+	height: 165px;
+}
+
+#img2 {
+	display: block;
+	width: 936px;
+	height: 26px;
+	margin: auto;
+}
+
+#rangImage{
+	width:75px;
+	height:21px;
+	border:1px solid black;
+	aligin:absmiddle;
+}
+
+ul li {
+	list-style: none;
+}
+
+#myul {
+	width: 300px;
+	height: 162px;
+	margin-top: 15px;
+	margin-left: 600px;
+	padding-top: 2px;
+}
+
+.myli {
+	margin: 14px 0px 0px 80px;
+}
+
+#mySubmit {
+	background-image: url("../images/btn1.jpg");
+	width: 73px;
+	height: 26px;
+}
+
+#myReset {
+	background-image: url("../images/btn2.jpg");
+	width: 73px;
+	height: 26px;
+}
+
+#li_four {
+	margin: 15px 0px 0px 45px;
+}
+
+#li_four input[type=reset] {
+	margin: 0px 0px 0px 40px;
+}

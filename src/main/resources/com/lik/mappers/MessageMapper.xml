@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lik.dao.MessageDao">
+	<resultMap type="Message" id="MessageResult">
+		<result property="id" column="id"/>
+		<result property="content" column="content"/>
+		<result property="createTime" column="createTime"/>
+		<result property="email" column="email"/>
+		<result property="msgName" column="msgName"/>
+		<result property="replyContent" column="replyContent"/>
+		<result property="replyTime" column="replyTime"/>
+	</resultMap>
+	
+	<select id="find" parameterType="Map" resultMap="MessageResult">
+		select * from message 
+		<where>
+	        <if test="msgName != null and msgName != ''">
+	            msgName like #{msgName}
+	        </if>
+	        <if test="content != null and content != ''">
+	            content like #{content}
+	        </if>
+    	</where>
+        <if test="start != null">
+            limit #{start},#{pageSize}
+        </if>
+	</select>
+	<select id="findById" parameterType="Integer" resultType="Message">
+		select * from message where id = #{id}
+	</select>
+	<select id="countMessages" parameterType="Map"  resultType="Long">
+		select count(*) from message
+		<where>
+	        <if test="msgName != null and msgName != ''">
+	            msgName like #{msgName}
+	        </if>
+	        <if test="content != null and content != ''">
+	            content like #{content}
+	        </if>
+        </where>
+	</select>
+	<insert id="add" parameterType="Message">
+		insert into message values (null,#{content},#{createTime},#{email},#{msgName},#{replyContent},#{replyTime})
+	</insert>
+	<update id="update" parameterType="Message">
+		update message
+		<set>
+			<if test="content != null and content != ''">
+				content = #{content},
+			</if>
+			<if test="createTime != null and createTime != ''">
+				createTime = #{createTime},
+			</if>
+			<if test="email != null and email != ''">
+				email = #{email},
+			</if>
+			<if test="msgName != null and msgName != ''">
+				msgName = #{msgName},
+			</if>
+			<if test="replyContent != null and replyContent != ''">
+				replyContent = #{replyContent},
+			</if>
+			<if test="replyTime != null">
+				replyTime = #{replyTime}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<delete  id="delete" parameterType="Integer">
+		delete from message where id=#{id}
+	</delete>
+</mapper>

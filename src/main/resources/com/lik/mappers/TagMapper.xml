@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lik.dao.TagDao">
+	<resultMap type="Tag" id="tagResult">
+		<result property="id" column="id"/>
+		<result property="name" column="name"/>
+	</resultMap>
+	<select id="find" parameterType="Map" resultMap="tagResult">
+		select * from tag 
+		<where>
+	        <if test="name != null and name!=''">
+	            name like #{name}
+	        </if>
+    	</where>
+        <if test="start != null">
+            limit #{start},#{pageSize}
+        </if>
+	</select>
+	<select id="findById" parameterType="Integer" resultMap="tagResult">
+		select * from tag where id = #{id}
+	</select>
+	<select id="countTag" parameterType="Map"  resultType="Long">
+		select count(*) from tag
+		<where>
+	        <if test="name != null and name!=''">
+	            name like #{name}
+	        </if>
+        </where>
+	</select>
+	<insert id="add" parameterType="tag">
+		insert into tag values (null,#{name})
+	</insert>
+	<update id="update" parameterType="tag">
+		update tag
+		<set>
+			<if test="name != null and name != ''">
+				name = #{name}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<delete  id="delete" parameterType="Integer">
+		delete from tag where id=#{id}
+	</delete>
+</mapper>
